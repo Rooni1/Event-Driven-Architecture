@@ -13,7 +13,13 @@ string queueName = "EDAQueue";
 channel.ExchangeDeclareAsync(exchangeName, ExchangeType.Direct);
 channel.QueueDeclareAsync(queueName,durable:false, exclusive:false,autoDelete:false,arguments:null);
 channel.QueueBindAsync(queueName,exchangeName,routingKey,arguments:null);
-byte[] messageBodyBytes = Encoding.UTF8.GetBytes("Hello Wellcome to EDA");
-channel.BasicPublishAsync(exchangeName, routingKey,messageBodyBytes);
+for(int i = 0; i < 20; i++)
+{
+    Console.WriteLine(value:$"Sending Message{i}");
+    byte[] messageBodyBytes = Encoding.UTF8.GetBytes($"Message #{i}: Hello Wellcome to EDA");
+    channel.BasicPublishAsync(exchangeName, routingKey, messageBodyBytes);
+    Thread.Sleep(1000);
+}
+
 channel.CloseAsync();
 conn.CloseAsync();
